@@ -18,6 +18,7 @@ public class MainInterface extends JFrame {
 	
 	public void loadFrame(List<Zombie> zombieList,Human human){
 		JFrame jf=new JFrame();
+		/*
 		JPanel jp=new JPanel(){
 			public void paint(Graphics g){
 				super.paint(g);
@@ -34,12 +35,53 @@ public class MainInterface extends JFrame {
 				//g.drawRect(100, 100, 100, 100);
 			}
 		};
+		*/
+		MyJPanel mjp=new MyJPanel(zombieList, human);
+		Thread t=new Thread(mjp);
+		t.start();
 		jf.setTitle("生化大作战");
 		jf.setBounds(700,300,800,600);
-		jp.setBackground(Color.white);
-		jf.add(jp);
+		mjp.setBackground(Color.white);
+		jf.add(mjp);
 		jf.setVisible(true);
 		
+	}
+	
+	class MyJPanel extends JPanel implements Runnable{
+		List<Zombie> zombieList;
+		Human human;
+		public MyJPanel(List<Zombie> zombieList,Human human){
+			this.zombieList=zombieList;
+			this.human=human;
+		}
+		public void paint(Graphics g){
+			super.paint(g);
+			g.clearRect(0, 0, 800, 600);
+			//Image image=Toolkit.getDefaultToolkit().getImage("images/models/zoombie.jpg");
+			//g.drawImage(image,300,400,60,60,null);
+			for(int i=0;i<this.zombieList.size();i++){
+				ImageIcon zoombieImage = new ImageIcon("images/models/zoombie.jpg");
+				g.drawImage(zoombieImage.getImage(),this.zombieList.get(i).getX(),this.zombieList.get(i).getY(),60,60,null);
+			}
+			
+			
+			ImageIcon humanImage = new ImageIcon("images/models/human.jpg");
+			g.drawImage(humanImage.getImage(),this.human.getX(),this.human.getY(),60,60,null);
+			//g.drawRect(100, 100, 100, 100);
+		}
+		public void run(){
+			while(true){
+				repaint();
+				try {
+					Thread.sleep(100);
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			
+		}
 	}
 	
 	public Zombie CreateZombie(int life,int moveSpeed,int x,int y){
