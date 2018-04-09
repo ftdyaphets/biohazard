@@ -1,9 +1,12 @@
 package com.ch.biohazard.main;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +45,23 @@ public class MainInterface extends JFrame {
 		jf.setTitle("生化大作战");
 		jf.setBounds(700,300,800,600);
 		mjp.setBackground(Color.white);
+		
+		jf.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e) {
+				
+			}
+			public void keyReleased(KeyEvent e) {
+				
+			}
+			public void keyPressed(KeyEvent e) {
+				mjp.human.setDirection(e);
+				mjp.human.move();
+			}
+		});
+		
 		jf.add(mjp);
+		jf.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		jf.setResizable(false);
 		jf.setVisible(true);
 		
 	}
@@ -56,6 +75,7 @@ public class MainInterface extends JFrame {
 		}
 		public void paint(Graphics g){
 			super.paint(g);
+			Color color=g.getColor();
 			g.clearRect(0, 0, 800, 600);
 			//Image image=Toolkit.getDefaultToolkit().getImage("images/models/zoombie.jpg");
 			//g.drawImage(image,300,400,60,60,null);
@@ -67,13 +87,20 @@ public class MainInterface extends JFrame {
 			
 			ImageIcon humanImage = new ImageIcon("images/models/human.jpg");
 			g.drawImage(humanImage.getImage(),this.human.getX(),this.human.getY(),60,60,null);
+			
+			if(!human.getStatus()){
+				g.setColor(Color.red);
+				g.setFont(new Font("Georgia", Font.BOLD, 24));
+				g.drawString("Gotcha!The zombie has eaten your brain!", 150, 300);
+				g.setColor(color);
+			}
 			//g.drawRect(100, 100, 100, 100);
 		}
 		public void run(){
 			while(true){
 				repaint();
 				try {
-					Thread.sleep(100);
+					Thread.sleep(10);
 					
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -101,7 +128,7 @@ public class MainInterface extends JFrame {
 	
 	public static void main(String[] args) {
 		MainInterface mi=new MainInterface();
-		Human human=new Human(100,15,600,100);
+		Human human=new Human(100,10,600,100);
 		List<Zombie>zombieList=new ArrayList<Zombie>();
 		Zombie zombie=new Zombie(2000,20, 100, 100);
 		zombieList.add(zombie);
