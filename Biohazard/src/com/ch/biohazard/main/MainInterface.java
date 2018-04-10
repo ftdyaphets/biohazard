@@ -15,10 +15,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.ch.biohazard.beans.Human;
+import com.ch.biohazard.beans.Missile;
 import com.ch.biohazard.beans.Zombie;
 
 public class MainInterface extends JFrame {
-	
+	public static List<Missile>missileList=new ArrayList<Missile>();
+	public   int width=800;
+	public   int height=600;
 	public void loadFrame(List<Zombie> zombieList,Human human){
 		JFrame jf=new JFrame();
 		/*
@@ -39,7 +42,7 @@ public class MainInterface extends JFrame {
 			}
 		};
 		*/
-		MyJPanel mjp=new MyJPanel(zombieList, human);
+		MyJPanel mjp=new MyJPanel(zombieList, human,missileList);
 		Thread t=new Thread(mjp);
 		t.start();
 		jf.setTitle("生化大作战");
@@ -51,11 +54,14 @@ public class MainInterface extends JFrame {
 				
 			}
 			public void keyReleased(KeyEvent e) {
-				
-			}
-			public void keyPressed(KeyEvent e) {
 				mjp.human.setDirection(e);
 				mjp.human.move();
+				if(e.getKeyCode()==KeyEvent.VK_J){
+					missileList=mjp.human.fire(missileList);
+				}
+			}
+			public void keyPressed(KeyEvent e) {
+				
 			}
 		});
 		
@@ -69,14 +75,16 @@ public class MainInterface extends JFrame {
 	class MyJPanel extends JPanel implements Runnable{
 		List<Zombie> zombieList;
 		Human human;
-		public MyJPanel(List<Zombie> zombieList,Human human){
+		List<Missile> missileList;
+		public MyJPanel(List<Zombie> zombieList,Human human,List<Missile> missileList){
 			this.zombieList=zombieList;
 			this.human=human;
+			this.missileList=missileList;
 		}
 		public void paint(Graphics g){
 			super.paint(g);
 			Color color=g.getColor();
-			g.clearRect(0, 0, 800, 600);
+			g.clearRect(0, 0, width, height);
 			//Image image=Toolkit.getDefaultToolkit().getImage("images/models/zoombie.jpg");
 			//g.drawImage(image,300,400,60,60,null);
 			for(int i=0;i<this.zombieList.size();i++){
@@ -84,9 +92,16 @@ public class MainInterface extends JFrame {
 				g.drawImage(zoombieImage.getImage(),this.zombieList.get(i).getX(),this.zombieList.get(i).getY(),60,60,null);
 			}
 			
+			for(int i=0;i<this.missileList.size();i++){
+				g.setColor(Color.red);
+				g.fillOval(missileList.get(i).getX(), missileList.get(i).getY(), missileList.get(i).getWidth(), missileList.get(i).getHeight());
+				g.setColor(color);
+			}
 			
 			ImageIcon humanImage = new ImageIcon("images/models/human.jpg");
 			g.drawImage(humanImage.getImage(),this.human.getX(),this.human.getY(),60,60,null);
+			
+			g.drawString(missileList.size()+" missiles left", 20, 20);
 			
 			if(!human.getStatus()){
 				g.setColor(Color.red);
@@ -124,6 +139,12 @@ public class MainInterface extends JFrame {
 		return distance;
 	}
 	
+	public boolean missileOutOfPanel(Missile missile){
+		if(missile.getX()<0||missile.getY()<0||missile.getX()>width||missile.getY()>height){
+			return true;
+		}
+		return false;
+	}
 	
 	
 	public static void main(String[] args) {
@@ -145,6 +166,14 @@ public class MainInterface extends JFrame {
 				System.out.println("zombie["+i+"]in action:");
 				zombieList.get(i).action(mi.getDistance(zombieList.get(i), human),human);
 				mi.repaint();
+			}
+			for(int i=0;i<missileList.size();i++){
+			
+				//System.out.println("missile["+i+"]move by :"+missileList.get(i).getDirection());
+				missileList.get(i).move(missileList.get(i).getDirection());
+				if(mi.missileOutOfPanel(missileList.get(i))){
+					missileList.remove(i);
+				}
 			}
 		}
 		
