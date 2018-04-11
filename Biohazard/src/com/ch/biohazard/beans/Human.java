@@ -118,7 +118,7 @@ public class Human {
 		case RD:;
 		case STOP:;
 		}
-		System.out.println("x "+this.x);
+		//System.out.println("x "+this.x);
 		if(this.x<0){
 			this.x=0;
 			
@@ -135,6 +135,30 @@ public class Human {
 		this.moveStatus=false;
 	}
 	
+	public boolean isLive() {
+		return isLive;
+	}
+	public void setLive(boolean isLive) {
+		this.isLive = isLive;
+	}
+	public int getModelWidth() {
+		return modelWidth;
+	}
+	public void setModelWidth(int modelWidth) {
+		this.modelWidth = modelWidth;
+	}
+	public int getModelHeight() {
+		return modelHeight;
+	}
+	public void setModelHeight(int modelHeight) {
+		this.modelHeight = modelHeight;
+	}
+	public boolean isMoveStatus() {
+		return moveStatus;
+	}
+	public void setMoveStatus(boolean moveStatus) {
+		this.moveStatus = moveStatus;
+	}
 	public List<Missile> fire(List<Missile>missileList){
 		int x;
 		int y;
