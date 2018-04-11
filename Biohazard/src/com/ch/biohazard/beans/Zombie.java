@@ -1,12 +1,45 @@
 package com.ch.biohazard.beans;
 
 public class Zombie {
+	private int maxLife;
+	public int getMaxLife() {
+		return maxLife;
+	}
+
+
+	public void setMaxLife(int maxLife) {
+		this.maxLife = maxLife;
+	}
+
+
 	private int life;
 	private int moveSpeed;
 	private int x;
 	private int y;
-	
+	private int modelWidth=60;
+	private int modelHeight=60;
+	public int getModelWidth() {
+		return modelWidth;
+	}
+
+
+	public void setModelWidth(int modelWidth) {
+		this.modelWidth = modelWidth;
+	}
+
+
+	public int getModelHeight() {
+		return modelHeight;
+	}
+
+
+	public void setModelHeight(int modelHeight) {
+		this.modelHeight = modelHeight;
+	}
+
+
 	public Zombie(int life,int moveSpeed,int x,int y){
+		this.maxLife=life;
 		this.life=life;
 		this.moveSpeed=moveSpeed;
 		this.x=x;
@@ -33,6 +66,19 @@ public class Zombie {
 	public void move(){
 		this.x+=moveSpeed;
 		System.out.println("move a step!");
+		if(this.x<0){
+			this.x=0;
+			
+		}
+		if((this.x+this.modelWidth)>800){
+			this.x=800-this.modelWidth;
+		}
+		if(this.y<0){
+			this.y=0;
+		}
+		if((this.y+this.modelHeight)>600){
+			this.y=600-this.modelHeight;
+		}
 	}
 	
 	public void attack(Human human){
@@ -47,6 +93,10 @@ public class Zombie {
 		else{
 			move();
 		}
+	}
+	
+	public void beingHitted(){
+		this.life-=200;
 	}
 	
 	public int getX() {

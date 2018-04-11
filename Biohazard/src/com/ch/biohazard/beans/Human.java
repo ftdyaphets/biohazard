@@ -14,6 +14,7 @@ public class Human {
 	public enum Direction{L,R,U,D,LU,RU,LD,RD,STOP};
 	private Direction direction=Direction.STOP;
 	private int modelWidth=60;
+	private int modelHeight=60;
 	private boolean moveStatus=false;
 	public Direction getDirection() {
 		return direction;
@@ -22,7 +23,7 @@ public class Human {
 		this.direction = direction;
 	}
 
-	private int modelHeight=60;
+	
 	public boolean getStatus() {
 		return isLive;
 	}
@@ -139,19 +140,19 @@ public class Human {
 		int y;
 		switch(this.direction){
 		case L:
-			x=this.x-5;
-			y=this.y;
+			x=this.x;
+			y=this.y+this.modelHeight/2;
 			break;
 		case R:
 			x=this.x+this.modelWidth;
-			y=this.y;
+			y=this.y+this.modelHeight/2;
 			break;
 		case U:
-			x=this.x;
-			y=this.y-5;
+			x=this.x+this.modelWidth/2;
+			y=this.y;
 			break;
 		case D:
-			x=this.x;
+			x=this.x+this.modelWidth/2;
 			y=this.y+this.modelHeight;
 			break;
 		case LU:;

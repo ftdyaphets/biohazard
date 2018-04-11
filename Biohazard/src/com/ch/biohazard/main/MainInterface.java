@@ -43,6 +43,7 @@ public class MainInterface extends JFrame {
 		};
 		*/
 		MyJPanel mjp=new MyJPanel(zombieList, human,missileList);
+		
 		Thread t=new Thread(mjp);
 		t.start();
 		jf.setTitle("生化大作战");
@@ -54,13 +55,13 @@ public class MainInterface extends JFrame {
 				
 			}
 			public void keyReleased(KeyEvent e) {
-				mjp.human.setDirection(e);
-				mjp.human.move();
 				if(e.getKeyCode()==KeyEvent.VK_J){
 					missileList=mjp.human.fire(missileList);
 				}
 			}
 			public void keyPressed(KeyEvent e) {
+				mjp.human.setDirection(e);
+				mjp.human.move();
 				
 			}
 		});
@@ -82,14 +83,26 @@ public class MainInterface extends JFrame {
 			this.missileList=missileList;
 		}
 		public void paint(Graphics g){
+			
 			super.paint(g);
 			Color color=g.getColor();
 			g.clearRect(0, 0, width, height);
 			//Image image=Toolkit.getDefaultToolkit().getImage("images/models/zoombie.jpg");
 			//g.drawImage(image,300,400,60,60,null);
 			for(int i=0;i<this.zombieList.size();i++){
+				Zombie zombie=this.zombieList.get(i);
 				ImageIcon zoombieImage = new ImageIcon("images/models/zoombie.jpg");
-				g.drawImage(zoombieImage.getImage(),this.zombieList.get(i).getX(),this.zombieList.get(i).getY(),60,60,null);
+				g.drawImage(zoombieImage.getImage(),zombie.getX(),zombie.getY(),60,60,null);
+				g.drawString("zombie["+i+"]: "+zombie.getLife(), 20+100*i, 30);
+				g.setColor(Color.red);
+				//g.drawLine(zombie.getX(), zombie.getY()-5, zombie.getX()+zombie.getModelWidth()*(zombie.getLife()/zombie.getMaxLife()), zombie.getY()-5);
+				g.fillRect(zombie.getX(), zombie.getY()-5,zombie.getModelWidth()/10*(zombie.getLife()*10/zombie.getMaxLife()),3);
+				if(zombie.getLife()<=0){
+					g.setFont(new Font("Georgia", Font.BOLD, 24));
+					g.drawString("kill a zombie!", 150, 300);
+					
+				}
+				g.setColor(color);
 			}
 			
 			for(int i=0;i<this.missileList.size();i++){
@@ -102,6 +115,7 @@ public class MainInterface extends JFrame {
 			g.drawImage(humanImage.getImage(),this.human.getX(),this.human.getY(),60,60,null);
 			
 			g.drawString(missileList.size()+" missiles left", 20, 20);
+			
 			
 			if(!human.getStatus()){
 				g.setColor(Color.red);
@@ -156,24 +170,39 @@ public class MainInterface extends JFrame {
 		Zombie zombie2=new Zombie(2000,20, 400, 100);
 		zombieList.add(zombie2);
 		mi.loadFrame(zombieList,human);
+		int hittedZombieNum;
 		while(human.getStatus()){
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
 			}
 			for(int i=0;i<zombieList.size();i++){
 				System.out.println("zombie["+i+"]in action:");
 				zombieList.get(i).action(mi.getDistance(zombieList.get(i), human),human);
+				if(zombieList.get(i).getLife()<=0){
+					zombieList.remove(i);
+				}
 				mi.repaint();
 			}
+			
 			for(int i=0;i<missileList.size();i++){
 			
 				//System.out.println("missile["+i+"]move by :"+missileList.get(i).getDirection());
+				
 				missileList.get(i).move(missileList.get(i).getDirection());
+				
+				hittedZombieNum=missileList.get(i).hitZombie(zombieList);
 				if(mi.missileOutOfPanel(missileList.get(i))){
 					missileList.remove(i);
+					break;
 				}
+				if(hittedZombieNum>=0){
+					zombieList.get(hittedZombieNum).beingHitted();
+					missileList.remove(i);
+				}
+				
+				
 			}
 		}
 		

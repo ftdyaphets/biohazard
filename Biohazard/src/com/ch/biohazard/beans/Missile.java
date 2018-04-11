@@ -1,5 +1,8 @@
 package com.ch.biohazard.beans;
 
+import java.awt.Rectangle;
+import java.util.List;
+
 import com.ch.biohazard.beans.Human.Direction;
 
 public class Missile {
@@ -77,5 +80,17 @@ public class Missile {
 			
 			break;
 		}
+	}
+	
+	public int hitZombie(List<Zombie>zombieList){
+		Rectangle missileRectangle=new Rectangle(this.x,this.y,this.width,this.height);
+		Rectangle zombieRectangle;
+		for(int i=0;i<zombieList.size();i++){
+			zombieRectangle=new Rectangle(zombieList.get(i).getX(),zombieList.get(i).getY(),zombieList.get(i).getModelWidth(),zombieList.get(i).getModelHeight());
+			if(missileRectangle.intersects(zombieRectangle)){
+				return i;
+			}
+		}
+		return -1;
 	}
 }
