@@ -124,6 +124,12 @@ public class MainInterface extends JFrame {
 				g.drawString("Gotcha!The zombie has eaten your brain!", 150, 300);
 				g.setColor(color);
 			}
+			if(zombieList.size()<=0){
+				g.setColor(Color.red);
+				g.setFont(new Font("Georgia", Font.BOLD, 24));
+				g.drawString("Congratulations!The human wins!", 150, 300);
+				g.setColor(color);
+			}
 			//g.drawRect(100, 100, 100, 100);
 		}
 		public void run(){
