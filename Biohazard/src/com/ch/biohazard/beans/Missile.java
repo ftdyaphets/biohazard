@@ -6,9 +6,9 @@ import java.util.List;
 import com.ch.biohazard.beans.Human.Direction;
 
 public class Missile {
-	private int moveSpeed=40;
-	private int width=5;
-	private int height=5;
+	private int moveSpeed=1;
+	private int width=10;
+	private int height=10;
 	private Direction direction;
 	private int x;
 	private int y;

@@ -148,7 +148,7 @@ public class Zombie {
 		Direction d=Direction.L;
 		do{
 			random=(int)(Math.random()*4);
-			System.out.println("random:"+random);
+			//System.out.println("random:"+random);
 			switch(random){
 			case 0:
 				d=Direction.L;
@@ -165,7 +165,7 @@ public class Zombie {
 			}
 		}while(d==this.direction);
 		this.direction=d;
-		System.out.println(this.direction);
+		System.out.println("change direction:"+this.direction);
  	}
 	
 	public void attack(Human human){

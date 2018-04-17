@@ -97,7 +97,7 @@ public class Human {
 	}
 	
 	public void move(){
-		System.out.println("direction: "+this.direction);
+		System.out.println("human move direction: "+this.direction);
 		int x=this.x;
 		int y=this.y;
 		if(!this.moveStatus){

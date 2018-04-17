@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -171,15 +172,27 @@ public class MainInterface extends JFrame {
 		zombieList.add(zombie2);
 		mi.loadFrame(zombieList,human);
 		int hittedZombieNum;
+		long startTime[]=new long[10];
+		Arrays.fill(startTime, System.currentTimeMillis());
+		long endTime[]=new long[10];
 		while(human.getStatus()){
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(10);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
+			
 			for(int i=0;i<zombieList.size();i++){
-				System.out.println("zombie["+i+"]in action:");
-				zombieList.get(i).action(mi.getDistance(zombieList.get(i), human),human);
+				
+				endTime[i]=System.currentTimeMillis();
+				//System.out.println(endTime[i]-startTime[i]);
+				if(endTime[i]-startTime[i]>=800){
+					System.out.println("zombie["+i+"]in action:");
+					zombieList.get(i).action(mi.getDistance(zombieList.get(i), human),human);
+					startTime[i]=System.currentTimeMillis();
+				}
+				
+				
 				if(zombieList.get(i).getLife()<=0){
 					zombieList.remove(i);
 				}
