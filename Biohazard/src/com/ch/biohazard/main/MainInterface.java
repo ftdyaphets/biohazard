@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.ch.biohazard.beans.Human;
+import com.ch.biohazard.beans.Human.Direction;
 import com.ch.biohazard.beans.Missile;
 import com.ch.biohazard.beans.Zombie;
 
@@ -92,12 +93,12 @@ public class MainInterface extends JFrame {
 			//g.drawImage(image,300,400,60,60,null);
 			for(int i=0;i<this.zombieList.size();i++){
 				Zombie zombie=this.zombieList.get(i);
-				ImageIcon zoombieImage = new ImageIcon("images/models/zoombie.jpg");
+				ImageIcon zoombieImage = new ImageIcon("images/models/zombie.jpg");
 				g.drawImage(zoombieImage.getImage(),zombie.getX(),zombie.getY(),60,60,null);
 				g.drawString("zombie["+i+"]: "+zombie.getLife(), 20+100*i, 30);
 				g.setColor(Color.red);
 				//g.drawLine(zombie.getX(), zombie.getY()-5, zombie.getX()+zombie.getModelWidth()*(zombie.getLife()/zombie.getMaxLife()), zombie.getY()-5);
-				g.fillRect(zombie.getX(), zombie.getY()-5,zombie.getModelWidth()/10*(zombie.getLife()*10/zombie.getMaxLife()),3);
+				g.fillRect(zombie.getX(), zombie.getY()-10,zombie.getModelWidth()/10*(zombie.getLife()*10/zombie.getMaxLife()),3);
 				if(zombie.getLife()<=0){
 					g.setFont(new Font("Georgia", Font.BOLD, 24));
 					g.drawString("kill a zombie!", 150, 300);
@@ -112,8 +113,8 @@ public class MainInterface extends JFrame {
 				g.setColor(color);
 			}
 			
-			ImageIcon humanImage = new ImageIcon("images/models/human.jpg");
-			g.drawImage(humanImage.getImage(),this.human.getX(),this.human.getY(),60,60,null);
+			
+			g.drawImage(getHumanImage(human),this.human.getX(),this.human.getY(),60,60,null);
 			
 			g.drawString(missileList.size()+" missiles left", 20, 20);
 			
@@ -145,6 +146,19 @@ public class MainInterface extends JFrame {
 			}
 			
 		}
+	}
+	
+	public Image getHumanImage(Human human){
+		ImageIcon humanImage=new ImageIcon("images/models/human_L.jpg");;
+		if(human.getDirection()==Direction.L){
+			humanImage = new ImageIcon("images/models/human_L.jpg");
+			
+		}
+		else if(human.getDirection()==Direction.R){
+			humanImage = new ImageIcon("images/models/human_R.jpg");
+		}
+		
+		return humanImage.getImage();
 	}
 	
 	public Zombie CreateZombie(int life,int moveSpeed,int x,int y){
